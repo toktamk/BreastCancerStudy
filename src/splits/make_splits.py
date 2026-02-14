@@ -46,6 +46,14 @@ def make_splits(df: pd.DataFrame, config: SplitConfig) -> Dict[str, np.ndarray]:
         raise ValueError("patient_id must be unique per row in the modeling cohort.")
 
     y = pd.to_numeric(df[config.stratify_col], errors="coerce")
+    n_nan = int(pd.isna(y).sum())
+    if n_nan > 0:
+        raise ValueError(
+            f"Stratify column '{config.stratify_col}' contains {n_nan} NaNs. "
+            f"Choose a stratify_col with no missing values (e.g., 'event'), "
+            f"or filter your cohort to rows with defined {config.stratify_col}."
+        )
+
     _check_binary(y, config.stratify_col)
 
     idx = np.arange(len(df))

@@ -4,7 +4,6 @@
 > **Positioning:** This repository is intentionally designed as a *methodological benchmark framework* (not a one-off model demo).  
 > It emphasizes deterministic ETL, explicit data contracts, leakage prevention, reusable pipelines, robust evaluation, and reproducible experimentation.
 
----
 
 ## Contents
 
@@ -18,16 +17,16 @@
 - [8. Splitting protocol](#8-splitting-protocol)
 - [9. Modeling](#9-modeling)
 - [10. Evaluation framework](#10-evaluation-framework)
-- [11. Multimodal ablation + missing-modality robustness](#11-multimodal-ablation--missing-modality-robustness)
-- [12. Reproducibility & governance](#12-reproducibility--governance)
-- [13. Known limitations](#13-known-limitations)
-- [14. Testing](#14-testing)
-- [15. Expected raw files](#15-expected-raw-files)
-- [16. Outputs and artifacts](#16-outputs-and-artifacts)
-- [17. Citation](#17-citation)
-- [18. License / acknowledgements](#18-license--acknowledgements)
+- [11. External Validation](#11-external-validation)
+- [12. Multimodal ablation + missing-modality robustness](#12-multimodal-ablation--missing-modality-robustness)
+- [13. Reproducibility & governance](#13-reproducibility--governance)
+- [14. Known limitations](#14-known-limitations)
+- [15. Testing](#15-testing)
+- [16. Expected raw files](#16-expected-raw-files)
+- [17. Outputs and artifacts](#17-outputs-and-artifacts)
+- [18. Citation](#18-citation)
+- [19. License / acknowledgements](#19-license--acknowledgements)
 
----
 
 ## 1. What this project is
 
@@ -45,7 +44,18 @@ The project focuses on *research-grade* criteria:
 - **Reusable & reproducible pipeline design** (deterministic artifacts, saved splits, manifests)
 - **Explicit data contracts** (schema checks, uniqueness checks, strict failure modes)
 
----
+### Research Contributions
+
+This repository demonstrates:
+
+- Deterministic multimodal ETL for heterogeneous biomedical data
+- Survival-consistent evaluation beyond binary classification
+- Calibration-aware benchmarking
+- Subgroup fairness quantification in survival settings
+- Multimodal ablation and missing-modality robustness
+- Version-controlled cohort governance
+- External validation scaffold for cross-cohort benchmarking
+
 
 ## 2. Scientific framing
 
@@ -73,7 +83,6 @@ For 5-year binary modeling:
 - Survive beyond 60 months → negative class
 - **Censored before 60 months** → **undefined binary label** (excluded from binary training/evaluation but retained for survival modeling)
 
----
 
 ## 3. Data and modalities
 
@@ -93,7 +102,6 @@ This enables:
 
 Wide format (one column per feature) is produced only during cohort assembly.
 
----
 
 ## 4. Repository structure
 
@@ -142,7 +150,6 @@ tests/
 ## Figure 1. Pipeline Architecture
 
 ![Pipeline Architecture](assets/pipeline_overview.jpg)
----
 
 ## 5. End-to-end workflow (recommended)
 
@@ -191,7 +198,6 @@ python scripts/run_ablation_suite.py \
   --outdir outputs/ablation
 ```
 
----
 
 ## 6. ETL pipeline
 
@@ -219,7 +225,6 @@ ETL does **not**:
 - `expression_long.parquet`
 - `cna_long.parquet`
 
----
 
 ## 7. Cohort assembly layer
 
@@ -244,7 +249,6 @@ Each cohort build writes a manifest documenting:
 
 This prevents silent cohort drift and supports exact regeneration.
 
----
 
 ## 8. Splitting protocol
 
@@ -262,7 +266,6 @@ Saved splits enable:
 - Stable comparisons across experiments
 - Reproducible ablation studies
 
----
 
 ## 9. Modeling
 
@@ -284,7 +287,6 @@ Survival models:
 - Use censoring-aware objectives
 - Produce risk scores and survival probability estimates (e.g., at 5 years)
 
----
 
 ## 10. Evaluation framework
 
@@ -328,9 +330,45 @@ Reported as:
 - Modality ablation (clinical-only vs multimodal)
 - Sensitivity analyses to key modeling assumptions
 
----
+### 10.5 Time-Dependent Survival Evaluation
 
-## 11. Multimodal ablation + missing-modality robustness
+Survival models are evaluated beyond static concordance using:
+
+- Time-dependent AUC at 3, 5, and 10 years
+- Integrated Brier Score (IBS)
+- Horizon-specific calibration curves
+
+This ensures evaluation reflects dynamic prediction performance rather than single-time discrimination.
+
+## Clinical Utility Assessment
+
+Model outputs are evaluated in a decision-analytic framework using:
+
+- Risk stratification (low / intermediate / high risk groups)
+- Kaplan–Meier curves by predicted risk group
+- Decision curve analysis (net benefit across thresholds)
+
+This connects statistical performance to potential clinical application and treatment decision support.
+
+
+## 11. External Validation
+
+To assess generalizability beyond METABRIC, models can be trained on the METABRIC cohort and externally evaluated on TCGA BRCA.
+
+External validation includes:
+
+- Gene-space harmonization (intersection of shared genes)
+- Consistent preprocessing (train-fitted transforms applied to test)
+- Time-dependent AUC at multiple horizons
+- Calibration slope shift
+- Integrated Brier Score
+- Risk-stratified Kaplan–Meier curves
+- Decision curve analysis
+
+This prevents over-interpretation of single-cohort performance and provides a realistic estimate of generalization performance.
+
+
+## 12. Multimodal ablation + missing-modality robustness
 
 This repository treats multimodality as an *experimental variable*, not a static design choice.
 
@@ -347,9 +385,8 @@ Robustness stress tests include:
 - random modality masking
 - evaluating degradation patterns and stability
 
----
 
-## 12. Reproducibility & governance
+## 13. Reproducibility & governance
 
 This project enforces research-grade reproducibility:
 
@@ -363,9 +400,20 @@ This project enforces research-grade reproducibility:
 The design goal is that *any result can be regenerated exactly* from:
 - raw files + config + seed
 
----
+### Data Contracts and Invariants
 
-## 13. Known limitations
+Each pipeline layer enforces explicit invariants:
+
+- ETL: one valid survival record per patient
+- Cohort assembly: one row per patient
+- Splitting: disjoint patient partitions
+- Preprocessing: train-only fit
+- Evaluation: single-shot test access
+
+Any violation triggers explicit failure rather than silent correction.
+
+
+## 14. Known limitations
 
 - Single-cohort evaluation (METABRIC only) → external validation is future work
 - Retrospective observational cohort → prognostic, not causal
@@ -374,9 +422,20 @@ The design goal is that *any result can be regenerated exactly* from:
 - Cox PH assumes proportional hazards; sensitivity analyses recommended
 - Clinical utility is not yet decision-analytic (e.g., decision curve analysis)
 
----
+### Leakage Threat Model
 
-## 14. Testing
+Potential leakage vectors explicitly mitigated include:
+
+- Feature filtering using outcome information
+- Duplicate patient entries across splits
+- Preprocessing fit on full dataset
+- Threshold tuning on test data
+- Post-hoc subgroup selection
+
+Mitigation strategies are implemented at the code level and validated by unit tests.
+
+
+## 15. Testing
 
 Run unit tests:
 ```bash
@@ -392,9 +451,8 @@ Testing philosophy:
   - leakage via preprocessing
   - bootstrap instability in single-class resamples
 
----
 
-## 15. Expected raw files
+## 16. Expected raw files
 
 Place the raw METABRIC exports under `data/raw/`.  
 This repository expects (names may be configurable in ETL scripts; align with your raw source):
@@ -407,9 +465,8 @@ This repository expects (names may be configurable in ETL scripts; align with yo
 
 If your raw file names differ, update the ETL script configuration accordingly.
 
----
 
-## 16. Outputs and artifacts
+## 17. Outputs and artifacts
 
 Typical outputs include:
 
@@ -418,21 +475,28 @@ Typical outputs include:
 - `data/processed/cohorts/*.manifest.json` (cohort manifests)
 - `outputs/` (model outputs, predictions, evaluation summaries)
 
----
 
-## 17. Citation
+## 18. Citation
 
 If this repository informs your work, please cite appropriately.  
 (You can replace this section with a DOI / Zenodo badge once you archive a release.)
 
----
 
-## 18. License / acknowledgements
+## 19. License / acknowledgements
 
 - Dataset: METABRIC (follow dataset licensing/terms of use from the original source)
 - Code: choose an open-source license consistent with your goals (e.g., MIT or BSD-3)
 
----
+
+## Future Directions
+
+Planned extensions include:
+
+- Cross-cohort harmonization across multiple breast cancer studies
+- Integration of RNA-seq and other molecular modalities
+- Causal modeling of treatment effects
+- Multi-task survival modeling
+- Deployment-oriented risk calibration pipelines
 
 ### Contact / Collaboration
 If you are interested in extending this framework (external validation, additional modalities, deep survival models, or clinical decision analysis), feel free to open an issue or propose an extension branch.

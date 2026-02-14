@@ -223,3 +223,40 @@ def predict_risk_coxnet(selected_model: Any, X: np.ndarray) -> np.ndarray:
     X = np.asarray(X, dtype=float)
     coef = np.asarray(selected_model.coef_, dtype=float).reshape(-1)
     return (X @ coef).reshape(-1)
+
+
+from __future__ import annotations
+
+import numpy as np
+
+
+def fit_cox_model(X: np.ndarray, time: np.ndarray, event: np.ndarray):
+    """
+    Minimal Cox wrapper.
+    Replace internals with your existing Cox fitter if already present.
+    """
+    try:
+        from lifelines import CoxPHFitter
+        import pandas as pd
+    except Exception as e:  # pragma: no cover
+        raise ImportError("Cox modeling requires lifelines: pip install lifelines") from e
+
+    df = pd.DataFrame(X, columns=[f"x{i}" for i in range(X.shape[1])])
+    df["time"] = time.astype(float)
+    df["event"] = event.astype(int)
+
+    cph = CoxPHFitter(penalizer=0.0)
+    cph.fit(df, duration_col="time", event_col="event")
+    return cph
+
+
+def predict_risk_cox(model, X: np.ndarray) -> np.ndarray:
+    """
+    Returns a risk score (higher => higher risk).
+    """
+    import pandas as pd
+    df = pd.DataFrame(X, columns=model.params_.index.tolist())
+    # lifelines: partial_hazard is exp(beta x)
+    ph = model.predict_partial_hazard(df).to_numpy().reshape(-1)
+    return ph.astype(float)
+

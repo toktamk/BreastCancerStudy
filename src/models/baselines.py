@@ -61,9 +61,18 @@ def predict_proba(model: LogisticRegression, X: np.ndarray) -> np.ndarray:
 
 
 # --- Survival optional: CoxPH using lifelines if installed
-def fit_cox_lifelines(X: np.ndarray, time: np.ndarray, event: np.ndarray) -> Any:
+# --- Survival optional: CoxPH using lifelines if installed
+def fit_cox_lifelines(
+    X: np.ndarray,
+    time: np.ndarray,
+    event: np.ndarray,
+    max_features: int = 2000,
+    var_floor: float = 1e-12,
+    penalizer: float = 1e-2,
+    l1_ratio: float = 0.0,
+) -> Any:
     """
-    Optional CoxPH baseline using lifelines. If lifelines is not installed, raise a clear error.
+    CoxPH baseline using lifelines, with feature capping to avoid O(p^2) memory blowups.
     """
     try:
         from lifelines import CoxPHFitter
@@ -73,21 +82,47 @@ def fit_cox_lifelines(X: np.ndarray, time: np.ndarray, event: np.ndarray) -> Any
             "Survival Cox baseline requires `lifelines`. Install it or skip Cox runs."
         ) from e
 
-    df = pd.DataFrame(X)
+    X = np.asarray(X)
+    p = X.shape[1]
+
+    # 1) drop (near) zero-variance features
+    var = X.var(axis=0)
+    keep = np.flatnonzero(var > var_floor)
+
+    if keep.size == 0:
+        raise ValueError("All survival features have ~zero variance after filtering.")
+
+    # 2) cap to top-K most variable features (if still huge)
+    if keep.size > max_features:
+        # sort keep by variance, take top-K
+        keep = keep[np.argsort(var[keep])[-max_features:]]
+
+    X_small = X[:, keep]
+
+    df = pd.DataFrame(X_small)
     df["time"] = time
     df["event"] = event
 
-    cph = CoxPHFitter()
+    cph = CoxPHFitter(penalizer=float(penalizer), l1_ratio=float(l1_ratio))
     cph.fit(df, duration_col="time", event_col="event")
+
+    # stash which columns we used so predict can match
+    cph._selected_cols = keep
     return cph
 
 
 def predict_risk_cox_lifelines(model: Any, X: np.ndarray) -> np.ndarray:
     """
-    Return risk scores (higher => higher risk).
+    Return risk scores (higher => higher risk). Uses the same feature subset as training.
     """
     import pandas as pd
+    X = np.asarray(X)
+
+    keep = getattr(model, "_selected_cols", None)
+    if keep is not None:
+        X = X[:, keep]
+
     df = pd.DataFrame(X)
-    # lifelines returns partial hazard
     risk = model.predict_partial_hazard(df).to_numpy().reshape(-1)
     return risk
+
