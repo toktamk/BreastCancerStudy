@@ -1,4 +1,3 @@
-# src/splits/make_splits.py
 from __future__ import annotations
 
 import json

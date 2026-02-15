@@ -9,7 +9,7 @@ from typing import Dict, Optional
 class DatasetPaths:
     """
     Simple contract: a dataset is represented by a cohort parquet.
-    (Later you can expand this to include raw/processed roots.)
+    (Later we can expand this to include raw/processed roots.)
     """
     cohort_parquet: Path
 

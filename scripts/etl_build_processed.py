@@ -1,4 +1,3 @@
-# scripts/etl_build_processed.py
 from __future__ import annotations
 
 import argparse

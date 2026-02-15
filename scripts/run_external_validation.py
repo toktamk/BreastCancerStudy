@@ -10,8 +10,8 @@ import pandas as pd
 from src.datasets.load_cohort import load_cohort_parquet, CohortSpec
 from src.harmonize.genes import intersect_feature_space, HarmonizeConfig
 from src.splits.make_splits import SplitConfig, make_splits
-from src.models.survival import fit_cox_model, predict_risk_cox  # expected in your survival.py
-from src.eval.evaluate import evaluate_binary  # expected in your evaluate.py
+from src.models.survival import fit_cox_model, predict_risk_cox  
+from src.eval.evaluate import evaluate_binary  
 from src.eval.time_dependent import time_dependent_auc_and_ibs
 from src.eval.decision_curve import decision_curve_binary
 from src.plots.risk_strata_km import make_risk_strata, km_summary_by_group
@@ -79,7 +79,7 @@ def main() -> None:
         test_event=e_test,
         test_risk_score=risk_test,
         horizons_months=horizons,
-        test_surv_fn=None,  # add if your Cox wrapper can output survival probs
+        test_surv_fn=None,  
     )
 
     surv_out = {
@@ -96,7 +96,6 @@ def main() -> None:
         Xb = df_bin[feat_cols].to_numpy(dtype=float)
 
         # Risk → probability mapping (simple logistic calibration using train dev)
-        # For research-grade work, you can replace this with Platt scaling / isotonic on train.
         # Here we transform risk score to probability via a monotonic link.
         # NOTE: This is intentionally conservative and explicit.
         rb = predict_risk_cox(model, Xb)

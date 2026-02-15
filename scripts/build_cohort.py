@@ -1,4 +1,3 @@
-# scripts/build_cohort.py
 from __future__ import annotations
 
 import argparse
@@ -52,8 +51,8 @@ def main() -> None:
         json.dumps(artifacts.manifest, indent=2), encoding="utf-8"
     )
 
-    print(f"✅ Saved cohort: {out_path} (n={len(artifacts.cohort_df)})")
-    print(f"✅ Saved manifest: {out_path.with_suffix('.manifest.json')}")
+    print(f" Saved cohort: {out_path} (n={len(artifacts.cohort_df)})")
+    print(f" Saved manifest: {out_path.with_suffix('.manifest.json')}")
 
 
 if __name__ == "__main__":

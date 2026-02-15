@@ -1,4 +1,3 @@
-# tests/conftest.py
 from __future__ import annotations
 
 import pytest
@@ -6,5 +5,5 @@ import pytest
 
 @pytest.fixture
 def seed() -> int:
-    # Handy if you later add randomized tests.
+    # Handy if we later add randomized tests.
     return 1337

@@ -1,4 +1,3 @@
-# tests/test_assemble_cohort.py
 from __future__ import annotations
 
 from pathlib import Path

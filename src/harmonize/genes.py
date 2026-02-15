@@ -12,7 +12,7 @@ class HarmonizeConfig:
     """
     Harmonization focuses on column intersection and consistent ordering.
 
-    For external validation you want:
+    For external validation we want:
     - same feature set
     - same feature order
     - same preprocessing parameters applied (train-fitted)
@@ -22,7 +22,7 @@ class HarmonizeConfig:
     event_col: str = "event"
     y60_col: str = "y60"
 
-    # Feature prefixes used in your cohort assembly
+    # Feature prefixes used in the cohort assembly
     expr_prefix: str = "expr__"
     cna_prefix: str = "cna__"
 

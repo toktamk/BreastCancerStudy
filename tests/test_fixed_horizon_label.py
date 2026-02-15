@@ -1,4 +1,3 @@
-# tests/test_fixed_horizon_label.py
 from __future__ import annotations
 
 import numpy as np

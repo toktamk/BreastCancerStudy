@@ -1,4 +1,3 @@
-# scripts/run_baselines.py
 from __future__ import annotations
 
 import argparse
@@ -38,11 +37,13 @@ def main() -> None:
     _ensure_dir(outdir)
 
     df = pd.read_parquet(cohort_path)
+    
     if "patient_id" not in df.columns:
         raise KeyError("cohort must include patient_id")
     if args.label not in df.columns:
         raise KeyError(f"cohort missing label '{args.label}'")
-
+    # --- Filter to defined binary label
+    df = df[df[args.label].notna()].copy()
     # --- Splits
     splits_dir = outdir / "splits"
     if (splits_dir / "train.csv").exists():

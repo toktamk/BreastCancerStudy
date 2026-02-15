@@ -22,7 +22,7 @@ def _require_sksurv() -> None:
         raise ImportError(
             "Time-dependent survival evaluation requires scikit-survival.\n"
             "Install (one option): pip install scikit-survival\n"
-            "If you are on Windows, conda-forge is often the easiest route:\n"
+            "If the code is running on Windows, conda-forge is often the easiest route:\n"
             "  conda install -c conda-forge scikit-survival\n"
         ) from e
 
@@ -71,7 +71,7 @@ def time_dependent_auc_and_ibs(
     )
 
     # IBS requires survival probability estimates over time for each test sample.
-    # If your model provides a survival function per patient, pass test_surv_fn.
+    # If the model provides a survival function per patient, pass test_surv_fn.
     ibs = None
     if test_surv_fn is not None:
         # test_surv_fn should return survival probs at given times for each sample.

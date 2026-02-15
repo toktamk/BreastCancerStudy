@@ -1,4 +1,3 @@
-# scripts/run_ablation_suite.py
 from __future__ import annotations
 
 import argparse

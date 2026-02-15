@@ -1,4 +1,3 @@
-# tests/test_make_splits.py
 from __future__ import annotations
 
 import numpy as np

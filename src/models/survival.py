@@ -1,4 +1,3 @@
-# src/models/survival.py
 from __future__ import annotations
 
 import logging
@@ -65,28 +64,57 @@ def _require_sksurv() -> Any:
 # CoxPH (lifelines)
 # ---------------------------
 
-def fit_coxph_lifelines(
-    X: np.ndarray,
-    time: np.ndarray,
-    event: np.ndarray,
-    cfg: CoxPHConfig = CoxPHConfig(),
-) -> Any:
-    """
-    Fit CoxPH using lifelines. Returns fitted CoxPHFitter.
-    """
-    CoxPHFitter, pd = _require_lifelines()
+def fit_coxph_lifelines(X, t, e, cfg):
+    import numpy as np
+    import pandas as pd
+    from lifelines import CoxPHFitter
 
-    X = np.asarray(X, dtype=float)
-    time = np.asarray(time, dtype=float)
-    event = np.asarray(event, dtype=int)
+    X = pd.DataFrame(X).copy()
+    t = pd.Series(t).astype(float).reset_index(drop=True)
+    e = pd.Series(e).astype(int).reset_index(drop=True)
 
-    df = pd.DataFrame(X)
-    df["time"] = time
-    df["event"] = event
+    # 1) Ensure numeric and finite
+    X = X.apply(pd.to_numeric, errors="coerce")
+    X = X.replace([np.inf, -np.inf], np.nan)
 
-    cph = CoxPHFitter(penalizer=float(cfg.penalizer), l1_ratio=float(cfg.l1_ratio))
-    cph.fit(df, duration_col="time", event_col="event", robust=bool(cfg.robust))
+    # Drop columns that are entirely NA
+    all_na = X.columns[X.isna().all()]
+    if len(all_na) > 0:
+        X = X.drop(columns=all_na)
+
+    # 2) Drop constant / near-constant columns (prevents std==0 => NaN)
+    # We can tune thresholds; these are safe defaults.
+    nunique = X.nunique(dropna=True)
+    const_cols = nunique[nunique <= 1].index
+    if len(const_cols) > 0:
+        X = X.drop(columns=list(const_cols))
+
+    # Optional: drop near-zero variance columns
+    # (variance computed after filling NaNs with column median)
+    X_filled = X.copy()
+    X_filled = X_filled.apply(lambda c: c.fillna(c.median()) if c.notna().any() else c)
+    var = X_filled.var(axis=0)
+    nzv_cols = var[var < 1e-12].index
+    if len(nzv_cols) > 0:
+        X = X.drop(columns=list(nzv_cols))
+
+    # 3) Impute remaining NaNs (lifelines can't handle NaN)
+    X = X.apply(lambda c: c.fillna(c.median()) if c.notna().any() else c.fillna(0.0))
+
+    # 4) Build lifelines dataframe
+    df = X.reset_index(drop=True)
+    df["time"] = t
+    df["event"] = e
+
+    # 5) Penalization to handle separation / collinearity
+    # If the cfg already has these fields, use them; otherwise set defaults:
+    penalizer = getattr(cfg, "penalizer", 0.1)      # try 0.1; if still unstable try 1.0
+    l1_ratio = getattr(cfg, "l1_ratio", 0.0)        # 0.0 = ridge, safer than lasso initially
+
+    cph = CoxPHFitter(penalizer=penalizer, l1_ratio=l1_ratio)
+    cph.fit(df, duration_col="time", event_col="event", robust=bool(getattr(cfg, "robust", False)))
     return cph
+
 
 
 def predict_risk_coxph_lifelines(model: Any, X: np.ndarray) -> np.ndarray:
@@ -225,15 +253,10 @@ def predict_risk_coxnet(selected_model: Any, X: np.ndarray) -> np.ndarray:
     return (X @ coef).reshape(-1)
 
 
-from __future__ import annotations
-
-import numpy as np
-
-
 def fit_cox_model(X: np.ndarray, time: np.ndarray, event: np.ndarray):
     """
     Minimal Cox wrapper.
-    Replace internals with your existing Cox fitter if already present.
+    Replace internals with the existing Cox fitter if already present.
     """
     try:
         from lifelines import CoxPHFitter
