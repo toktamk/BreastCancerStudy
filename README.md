@@ -19,7 +19,7 @@
 
 A reproducible, calibration-aware, fairness-evaluated framework for 5-year overall survival (OS) risk prediction and censoring-aware survival modeling using multimodal clinical + omics data from METABRIC.
 
----
+
 
 ## What this project is
 
@@ -33,7 +33,7 @@ This repository provides an end-to-end experimental framework for:
 - **Multimodal ablation** and **missing-modality stress tests**
 - **Governed train/val/test splits** (patient-level, deterministic seeds)
 
----
+
 
 ## Key results (current best run)
 
@@ -47,7 +47,7 @@ Recalibrated CoxPH survival model evaluated on the test split (defined labels **
 
 Subgroup fairness diagnostics show consistently high discrimination across age strata, ER status, molecular subtype, and menopausal status, with moderate and biologically plausible calibration heterogeneity in smaller molecular subtypes.
 
----
+
 
 ## Repository structure
 
@@ -91,7 +91,7 @@ runs/
 tests/
 ```
 
----
+
 
 ## End-to-end workflow
 
@@ -130,7 +130,7 @@ python scripts/run_baselines.py \
   --outdir runs/binary/lr
 ```
 
----
+
 
 ## Calibration evaluation (sanity checks)
 
@@ -146,7 +146,7 @@ python scripts/sanity_check_calibration.py \
 
 Outputs include Brier, log loss, AUROC, calibration slope/intercept, ECE, reliability bins, and label/horizon consistency checks.
 
----
+
 
 ## Fairness and robustness evaluation (subgroup and bootstrap)
 
@@ -169,7 +169,7 @@ Produces:
 
 > Note: `age_group` is derived from `AGE_AT_DIAGNOSIS` if not present.
 
----
+
 
 ## Recalibration workflow
 
@@ -193,7 +193,7 @@ python scripts/eval_survival_fairness_robustness.py \
   --outdir runs/survival/coxph/fairness_robustness_recal
 ```
 
----
+
 
 ## Governance and reproducibility
 
@@ -203,7 +203,7 @@ python scripts/eval_survival_fairness_robustness.py \
 - Explicit failure on invalid stratification and broken joins
 - Cohort manifest JSON for traceability and regeneration
 
----
+
 
 ## Testing
 
@@ -211,7 +211,7 @@ python scripts/eval_survival_fairness_robustness.py \
 pytest -q
 ```
 
----
+
 
 ## Intended use
 
