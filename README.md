@@ -20,7 +20,6 @@
 A reproducible, calibration-aware, fairness-evaluated framework for 5-year overall survival (OS) risk prediction and censoring-aware survival modeling using multimodal clinical + omics data from METABRIC.
 
 ## What this project is
-
 This repository provides an end-to-end experimental framework for:
 
 - **Survival modeling** (penalized Cox PH)
@@ -32,7 +31,6 @@ This repository provides an end-to-end experimental framework for:
 - **Governed train/val/test splits** (patient-level, deterministic seeds)
 
 ## Key results (current best run)
-
 Recalibrated CoxPH survival model evaluated on the test split (defined labels **n=380**):
 
 - **AUROC:** 0.967  
