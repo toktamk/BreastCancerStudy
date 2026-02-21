@@ -35,6 +35,12 @@ This repository provides an end-to-end experimental framework for:
 
 ---
 
+## ⚠️ Legal Notice
+
+ This repository is published for viewing purposes only.
+ All rights reserved. No permission is granted to use, reproduce, modify, or redistribute any part of this repository without prior written consent from the author.
+ See `NOTICE.md` for full terms.
+
 ## Key results (current best run)
 
 Recalibrated CoxPH survival model evaluated on the test split (defined labels **n=380**):
