@@ -19,10 +19,7 @@
 
 A reproducible, calibration-aware, fairness-evaluated framework for 5-year overall survival (OS) risk prediction and censoring-aware survival modeling using multimodal clinical + omics data from METABRIC.
 
----
-
 ## What this project is
-
 This repository provides an end-to-end experimental framework for:
 
 - **Survival modeling** (penalized Cox PH)
@@ -33,16 +30,18 @@ This repository provides an end-to-end experimental framework for:
 - **Multimodal ablation** and **missing-modality stress tests**
 - **Governed train/val/test splits** (patient-level, deterministic seeds)
 
+<<<<<<< HEAD
 ---
 
-## ⚠️ Legal Notice
+## Legal Notice
 
  This repository is published for viewing purposes only.
  All rights reserved. No permission is granted to use, reproduce, modify, or redistribute any part of this repository without prior written consent from the author.
  See `NOTICE.md` for full terms.
 
+=======
+>>>>>>> ef290cd260a381003ddd07545fec6f0ea67f5ccc
 ## Key results (current best run)
-
 Recalibrated CoxPH survival model evaluated on the test split (defined labels **n=380**):
 
 - **AUROC:** 0.967  
@@ -52,8 +51,6 @@ Recalibrated CoxPH survival model evaluated on the test split (defined labels **
 - **Mean predicted risk vs prevalence:** 0.188 vs 0.216 (mild underprediction)
 
 Subgroup fairness diagnostics show consistently high discrimination across age strata, ER status, molecular subtype, and menopausal status, with moderate and biologically plausible calibration heterogeneity in smaller molecular subtypes.
-
----
 
 ## Repository structure
 
@@ -97,8 +94,6 @@ runs/
 tests/
 ```
 
----
-
 ## End-to-end workflow
 
 ### 1) ETL for generating processed tables
@@ -136,8 +131,6 @@ python scripts/run_baselines.py \
   --outdir runs/binary/lr
 ```
 
----
-
 ## Calibration evaluation (sanity checks)
 
 Survival horizon calibration + invariants:
@@ -151,8 +144,6 @@ python scripts/sanity_check_calibration.py \
 ```
 
 Outputs include Brier, log loss, AUROC, calibration slope/intercept, ECE, reliability bins, and label/horizon consistency checks.
-
----
 
 ## Fairness and robustness evaluation (subgroup and bootstrap)
 
@@ -174,8 +165,6 @@ Produces:
 - `fairness_<COL>_threshold_parity.csv` (TPR/FPR/PPV parity at threshold)
 
 > Note: `age_group` is derived from `AGE_AT_DIAGNOSIS` if not present.
-
----
 
 ## Recalibration workflow
 
@@ -199,8 +188,6 @@ python scripts/eval_survival_fairness_robustness.py \
   --outdir runs/survival/coxph/fairness_robustness_recal
 ```
 
----
-
 ## Governance and reproducibility
 
 - Patient-level splits (no overlap across train/val/test)
@@ -209,15 +196,11 @@ python scripts/eval_survival_fairness_robustness.py \
 - Explicit failure on invalid stratification and broken joins
 - Cohort manifest JSON for traceability and regeneration
 
----
-
 ## Testing
 
 ```bash
 pytest -q
 ```
-
----
 
 ## Intended use
 
