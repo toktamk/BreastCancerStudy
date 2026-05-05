@@ -33,7 +33,7 @@ Khatibi, T. (2026). *Multimodal Survival Modeling and Fairness-Aware Clinical Ma
   year    = {2026},
   url     = {https://arxiv.org/abs/2602.21648}
 }
-
+```
 ## What this project is
 This repository provides an end-to-end experimental framework for:
 
