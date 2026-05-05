@@ -19,6 +19,14 @@
 
 A reproducible, calibration-aware, fairness-evaluated framework for 5-year overall survival (OS) risk prediction and censoring-aware survival modeling using multimodal clinical + omics data from METABRIC.
 
+@article{Multimodal survival modeling,
+title   = {Multimodal Survival Modeling and Fairness-Aware Clinical Machine Learning for 5-Year Breast Cancer Risk Prediction},
+author  = {Khatibi, Toktam},
+journal = {arXiv preprint arXiv:2602.21648},
+year    = {2026},
+url     = {https://arxiv.org/abs/2602.21648}
+}
+
 ## What this project is
 This repository provides an end-to-end experimental framework for:
 
