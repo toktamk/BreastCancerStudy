@@ -1,127 +1,158 @@
-
 # Multimodal Survival Modeling for Breast Cancer (METABRIC)
 
-![Python](https://img.shields.io/badge/python-3.11%2B-blue)
-![Status](https://img.shields.io/badge/status-research%20pipeline-success)
-![Dataset](https://img.shields.io/badge/dataset-METABRIC-informational)
-![Task](https://img.shields.io/badge/task-survival%20%2B%205yr%20risk-orange)
-![Model](https://img.shields.io/badge/model-penalized%20CoxPH-purple)
+Evaluation-driven multimodal framework for survival prediction, calibration analysis, and fairness-aware clinical machine learning using METABRIC clinical and omics data.
 
-<!-- Key results (recalibrated CoxPH @ 60 months; n=380 defined labels) -->
-![AUROC](https://img.shields.io/badge/AUROC-0.967-brightgreen)
-![AUROC%2095%25%20CI](https://img.shields.io/badge/AUROC%2095%25%20CI-0.949%E2%80%930.981-brightgreen)
-![Brier](https://img.shields.io/badge/Brier-0.064-brightgreen)
-![Brier%2095%25%20CI](https://img.shields.io/badge/Brier%2095%25%20CI-0.047%E2%80%930.082-brightgreen)
+This repository explores robust risk prediction under real-world clinical ML constraints, including:
 
-![Calibration](https://img.shields.io/badge/evaluation-calibration%20%7C%20fairness%20%7C%20robustness-blueviolet)
-![Bootstrap](https://img.shields.io/badge/robustness-bootstrap%201000x-blue)
-![Fairness](https://img.shields.io/badge/fairness-subgroup%20parity%20checks-blue)
+* censoring-aware survival modelling,
+* calibration reliability,
+* subgroup fairness evaluation,
+* robustness analysis,
+* and reproducible multimodal experimentation.
 
-A reproducible, calibration-aware, fairness-evaluated framework for 5-year overall survival (OS) risk prediction and censoring-aware survival modeling using multimodal clinical + omics data from METABRIC.
+## System Overview
 
-> If this work contributes to your research or system design, we would appreciate a citation:
+<p align="center">
+  <img src="docs/MultimodalSurvivalAnalysisArchitecture.png" width="95%">
+</p>
 
-**APA-style:**
-Khatibi, T. (2026). *Multimodal Survival Modeling and Fairness-Aware Clinical Machine Learning for 5-Year Breast Cancer Risk Prediction*. arXiv preprint arXiv:2602.21648. https://arxiv.org/abs/2602.21648
+The framework integrates:
 
-**BibTeX:**
-```bibtex
-@article{toktam2026,
-  title   = {Multimodal Survival Modeling and Fairness-Aware Clinical Machine Learning for 5-Year Breast Cancer Risk Prediction},
-  author  = {Khatibi, Toktam},
-  journal = {arXiv preprint arXiv:2602.21648},
-  year    = {2026},
-  url     = {https://arxiv.org/abs/2602.21648}
-}
-```
-## What this project is
-This repository provides an end-to-end experimental framework for:
+* clinical variables,
+* molecular and omics features,
+* calibration-aware prediction,
+* subgroup fairness diagnostics,
+* and bootstrap robustness analysis
 
-- **Survival modeling** (penalized Cox PH)
-- **Fixed-horizon (5-year) risk prediction** at **60 months**
-- **Calibration diagnostics** (slope/intercept, ECE, reliability bins)
-- **Fairness evaluation** across clinically relevant subgroups
-- **Robustness assessment** via **bootstrap confidence intervals**
-- **Multimodal ablation** and **missing-modality stress tests**
-- **Governed train/val/test splits** (patient-level, deterministic seeds)
+for evaluation-driven survival modelling workflows.
 
-<<<<<<< HEAD
----
+## Core Capabilities
 
-## Legal Notice
+### Survival Modeling
 
- This repository is published for viewing purposes only.
- All rights reserved. No permission is granted to use, reproduce, modify, or redistribute any part of this repository without prior written consent from the author.
- See `NOTICE.md` for full terms.
+* Penalized Cox proportional hazards models
+* Fixed-horizon (5-year) risk prediction
+* Censoring-aware survival analysis
+* Time-to-event modelling workflows
 
-=======
->>>>>>> ef290cd260a381003ddd07545fec6f0ea67f5ccc
-## Key results (current best run)
-Recalibrated CoxPH survival model evaluated on the test split (defined labels **n=380**):
+### Multimodal Learning
 
-- **AUROC:** 0.967  
-- **AUROC 95% CI (bootstrap, 1000×):** 0.949–0.981  
-- **Brier:** 0.064  
-- **Brier 95% CI (bootstrap, 1000×):** 0.047–0.082  
-- **Mean predicted risk vs prevalence:** 0.188 vs 0.216 (mild underprediction)
+* Clinical + omics feature integration
+* Missing-modality stress testing
+* Multimodal ablation analysis
+* Deterministic patient-level cohort construction
 
-Subgroup fairness diagnostics show consistently high discrimination across age strata, ER status, molecular subtype, and menopausal status, with moderate and biologically plausible calibration heterogeneity in smaller molecular subtypes.
+### Calibration & Reliability
 
-## Repository structure
+* Calibration slope and intercept analysis
+* Expected calibration error (ECE)
+* Reliability bin evaluation
+* Bootstrap confidence intervals
 
-```
-data/
-  raw/
-  processed/
-    cohorts/
-      metabric_complete_case_v1.parquet
-      metabric_complete_case_v1.manifest.json
+### Fairness & Robustness
 
+* Subgroup fairness diagnostics
+* Threshold parity analysis
+* Robustness benchmarking
+* Confidence interval estimation
+
+### Reproducibility
+
+* Deterministic train/validation/test splits
+* Cohort manifests and traceability
+* Train-only preprocessing workflows
+* Fully reproducible evaluation pipelines
+
+## Why This Project
+
+Clinical survival prediction systems require more than discrimination performance alone.
+
+This repository focuses on:
+
+* calibration quality,
+* subgroup reliability,
+* reproducibility,
+* and robustness evaluation
+
+for clinically grounded multimodal survival modeling.
+
+The emphasis is on evaluation-driven machine learning rather than leaderboard optimisation.
+
+## Benchmark Highlights
+
+### Recalibrated CoxPH Model
+
+| Metric       | Result      |
+| ------------ | ----------- |
+| AUROC        | **0.967**   |
+| AUROC 95% CI | 0.949–0.981 |
+| Brier Score  | **0.064**   |
+| Brier 95% CI | 0.047–0.082 |
+
+### Key Observations
+
+* Strong discrimination performance across multimodal risk prediction tasks
+* Stable calibration under bootstrap evaluation
+* Consistent subgroup discrimination across clinically relevant cohorts
+* Moderate calibration heterogeneity in smaller molecular subtypes
+
+## Research Contributions
+
+* Evaluation-driven multimodal survival modeling
+* Calibration-aware clinical ML workflows
+* Fairness diagnostics for prognostic modeling
+* Bootstrap robustness evaluation
+* Missing-modality stress testing
+* Reproducible clinical ML pipelines
+
+## Technical Stack
+
+### Core Frameworks
+
+Python • PyTorch • Scikit-learn • XGBoost
+
+### Survival & Evaluation
+
+Lifelines • Survival Analysis • Calibration Metrics • Bootstrap Evaluation
+
+### Explainability & Robustness
+
+SHAP • Fairness Diagnostics • Reliability Analysis
+
+### Data Engineering
+
+Pandas • NumPy • Cohort Pipelines
+
+## Repository Structure
+
+```text id="9zht1d"
 src/
   data/
-  splits/
   models/
-    survival.py
-    baselines.py
   eval/
-    evaluate.py
-    survival_eval.py
-    time_dependent.py
   fairness/
-    group_eval.py
   robustness/
-    bootstrap.py
   experiments/
-    ablation.py
 
 scripts/
-  etl_build_processed.py
-  build_cohort.py
-  run_survival_models.py
-  run_baselines.py
-  sanity_check_calibration.py
-  eval_survival_fairness_robustness.py
-
 runs/
-  binary/
-  survival/
-
 tests/
+docs/
 ```
 
-## End-to-end workflow
+## End-to-End Workflow
 
-### 1) ETL for generating processed tables
+### 1. Build Processed Tables
 
-```bash
+```bash id="w4vjtp"
 python scripts/etl_build_processed.py \
   --raw_dir data/raw \
   --out_dir data/processed
 ```
 
-### 2) Build cohort (complete-case multimodal)
+### 2. Build Multimodal Cohort
 
-```bash
+```bash id="1w7r9i"
 python scripts/build_cohort.py \
   --processed_dir data/processed \
   --out_path data/processed/cohorts/metabric_complete_case_v1.parquet \
@@ -129,101 +160,79 @@ python scripts/build_cohort.py \
   --require_cna
 ```
 
-### 3) Train and evaluate survival model
+### 3. Train Survival Model
 
-```bash
+```bash id="6ub9cq"
 python scripts/run_survival_models.py \
   --cohort data/processed/cohorts/metabric_complete_case_v1.parquet \
   --outdir runs/survival/coxph
 ```
 
-### 4) Binary baseline (fixed-horizon y60)
+## Calibration Evaluation
 
-```bash
-python scripts/run_baselines.py \
-  --cohort data/processed/cohorts/metabric_complete_case_v1.parquet \
-  --label y60 \
-  --outdir runs/binary/lr
-```
+The framework supports:
 
-## Calibration evaluation (sanity checks)
+* calibration slope/intercept analysis,
+* ECE evaluation,
+* reliability bin diagnostics,
+* and horizon consistency checks.
 
-Survival horizon calibration + invariants:
+## Fairness & Robustness Evaluation
 
-```bash
-python scripts/sanity_check_calibration.py \
-  --cohort data/processed/cohorts/metabric_complete_case_v1.parquet \
-  --preds runs/survival/coxph/preds/test.parquet \
-  --p-col risk_prob_horizon \
-  --outdir runs/survival/coxph
-```
+Supported analyses include:
 
-Outputs include Brier, log loss, AUROC, calibration slope/intercept, ECE, reliability bins, and label/horizon consistency checks.
+* subgroup AUROC/AUPRC evaluation,
+* threshold parity diagnostics,
+* bootstrap confidence intervals,
+* and calibration comparison across clinical subgroups.
 
-## Fairness and robustness evaluation (subgroup and bootstrap)
+## Reproducibility
 
-```bash
-python scripts/eval_survival_fairness_robustness.py \
-  --cohort data/processed/cohorts/metabric_complete_case_v1.parquet \
-  --preds runs/survival/coxph/preds/test.parquet \
-  --p-col risk_prob_horizon \
-  --group-cols age_group,SEX,ER_IHC,CLAUDIN_SUBTYPE,INFERRED_MENOPAUSAL_STATE \
-  --threshold 0.2 \
-  --bootstrap 1000 \
-  --outdir runs/survival/coxph/fairness_robustness
-```
+The repository emphasises:
 
-Produces:
+* deterministic experimentation,
+* patient-level split integrity,
+* cohort traceability,
+* and evaluation reproducibility.
 
-- `report.json` (global + subgroup metrics)
-- `fairness_<COL>_group_metrics.csv` (AUROC/AUPRC/Brier + calibration per group)
-- `fairness_<COL>_threshold_parity.csv` (TPR/FPR/PPV parity at threshold)
+Key safeguards include:
 
-> Note: `age_group` is derived from `AGE_AT_DIAGNOSIS` if not present.
+* stored split manifests,
+* train-only preprocessing,
+* deterministic seeds,
+* and explicit cohort validation.
 
-## Recalibration workflow
-
-If calibration slope deviates from 1:
-
-1. Fit logistic recalibration on validation predictions  
-2. Apply transformation to test predictions  
-3. Save recalibrated probabilities under `risk_prob_horizon_recal`  
-4. Re-run fairness + robustness evaluation using `--p-col risk_prob_horizon_recal`
-
-Example:
-
-```bash
-python scripts/eval_survival_fairness_robustness.py \
-  --cohort data/processed/cohorts/metabric_complete_case_v1.parquet \
-  --preds runs/survival/coxph/preds/test_recal.parquet \
-  --p-col risk_prob_horizon_recal \
-  --group-cols age_group,SEX,ER_IHC,CLAUDIN_SUBTYPE,INFERRED_MENOPAUSAL_STATE \
-  --threshold 0.2 \
-  --bootstrap 1000 \
-  --outdir runs/survival/coxph/fairness_robustness_recal
-```
-
-## Governance and reproducibility
-
-- Patient-level splits (no overlap across train/val/test)
-- Deterministic seeds and stored split CSVs
-- Train-only preprocessing fit
-- Explicit failure on invalid stratification and broken joins
-- Cohort manifest JSON for traceability and regeneration
-
-## Testing
-
-```bash
-pytest -q
-```
-
-## Intended use
+## Intended Use
 
 Designed for:
 
-- Academic survival modeling research
-- Clinical ML benchmarking
-- Fairness-aware prognostic modeling
-- Calibration methodology and diagnostics
+* multimodal survival modeling research,
+* evaluation-driven clinical ML,
+* calibration analysis,
+* and fairness-aware prognostic modelling.
 
-Not intended for direct clinical deployment.
+Not intended for direct clinical deployment or medical decision-making.
+
+## Detailed Evaluation
+
+Extended calibration analysis, fairness diagnostics, ablations, and robustness evaluation are available in:
+[Technical Report](docs/technical_report.md)
+
+## Current Research Directions
+
+* Deep survival learning extensions
+* Time-dependent survival evaluation
+* Advanced multimodal fusion strategies
+* Cross-cohort robustness analysis
+* Calibration-aware foundation models for healthcare AI
+
+## Citation
+
+If this repository contributes to your research or technical work, please cite appropriately.
+
+## Author
+
+Toktam Khatibi
+Senior Machine Learning Research Scientist
+
+Clinical AI • Multimodal Learning • Survival Modeling • Evaluation-Driven Healthcare AI
