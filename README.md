@@ -10,6 +10,20 @@ This repository explores robust risk prediction under real-world clinical ML con
 * robustness analysis,
 * and reproducible multimodal experimentation.
 
+## Ecosystem Context
+
+This repository is part of a broader Clinical AI Systems Ecosystem exploring:
+- evidence-grounded healthcare AI,
+- multimodal patient modelling,
+- evaluation-aware machine learning,
+- reproducible experimentation,
+- and deployment-oriented clinical AI workflows.
+
+Other repositories in the ecosystem investigate:
+- clinical Retrieval-Augmented Generation (RAG),
+- medical imaging representation learning,
+- and evidence-aware AI orchestration.
+
   ## Clinical Motivation
 
 Risk prediction systems in oncology often require more than strong discrimination metrics alone. In practical settings, calibration stability, subgroup reliability, and robustness across heterogeneous patient populations can substantially affect downstream clinical interpretation.
