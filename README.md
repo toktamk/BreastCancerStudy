@@ -10,6 +10,12 @@ This repository explores robust risk prediction under real-world clinical ML con
 * robustness analysis,
 * and reproducible multimodal experimentation.
 
+  ## Clinical Motivation
+
+Risk prediction systems in oncology often require more than strong discrimination metrics alone. In practical settings, calibration stability, subgroup reliability, and robustness across heterogeneous patient populations can substantially affect downstream clinical interpretation.
+
+This repository explores evaluation-driven multimodal survival modelling with particular attention to calibration behaviour, fairness diagnostics, and reproducible patient-level experimentation.
+
 ## System Overview
 
 <p align="center">
@@ -80,6 +86,8 @@ The emphasis is on evaluation-driven machine learning rather than leaderboard op
 
 ## Benchmark Highlights
 
+The reported metrics are dataset-specific and are intended primarily for methodological and evaluation-oriented analysis rather than direct clinical performance claims.
+
 ### Recalibrated CoxPH Model
 
 | Metric       | Result      |
@@ -96,6 +104,18 @@ The emphasis is on evaluation-driven machine learning rather than leaderboard op
 * Consistent subgroup discrimination across clinically relevant cohorts
 * Moderate calibration heterogeneity in smaller molecular subtypes
 
+## Operational Reliability Considerations
+
+The repository includes several safeguards intended to reduce common reliability issues in clinical machine learning workflows:
+- patient-level train/validation/test separation,
+- train-only preprocessing,
+- deterministic cohort generation,
+- calibration-aware evaluation,
+- subgroup robustness analysis,
+- and bootstrap confidence interval estimation.
+
+These workflows are included to support reproducible and traceable experimentation under realistic clinical ML constraints.
+
 ## Research Contributions
 
 * Evaluation-driven multimodal survival modeling
@@ -105,7 +125,19 @@ The emphasis is on evaluation-driven machine learning rather than leaderboard op
 * Missing-modality stress testing
 * Reproducible clinical ML pipelines
 
+## Known Limitations
+
+Several limitations remain:
+- complete-case cohort selection may introduce sampling bias,
+- external cohort validation is not yet included,
+- calibration behaviour varies across smaller molecular subgroups,
+- and multimodal availability constraints may affect robustness.
+
+Future work will explore cross-cohort validation, advanced multimodal fusion strategies, and calibration-aware foundation modelling approaches.
+
 ## Technical Stack
+
+The implementation combines classical survival analysis workflows with modern multimodal machine learning pipelines using PyTorch, XGBoost, Lifelines, SHAP, and reproducible cohort engineering utilities.
 
 ### Core Frameworks
 
